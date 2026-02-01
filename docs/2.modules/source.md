@@ -7,7 +7,7 @@ icon: i-lucide-link
 Parse source strings into structured data. Supports GitHub, GitLab, URLs, and local paths.
 
 ```ts
-import { isLocalPath, isUrl, parseSource } from 'unagents/source'
+import { isLocalPath, isUrl, parseSource } from 'unagent/source'
 ```
 
 ## Parsing

@@ -7,7 +7,7 @@ icon: i-lucide-scan-search
 Agent detection, configuration paths, and environment utilities.
 
 ```ts
-import { detectCurrentAgent, getAgentConfigDir, getXDGPaths } from 'unagents/env'
+import { detectCurrentAgent, getAgentConfigDir, getXDGPaths } from 'unagent/env'
 ```
 
 ## Detection
@@ -40,7 +40,7 @@ const agents = detectInstalledAgents()
 Check if a specific agent is running via its env vars.
 
 ```ts
-import { agents, detectAgentByEnv } from 'unagents/env'
+import { agents, detectAgentByEnv } from 'unagent/env'
 
 if (detectAgentByEnv(agents['claude-code'])) {
   console.log('Running in Claude Code')
@@ -64,7 +64,7 @@ if (isRunningInAgent('cursor')) {
 Get expanded config directory path.
 
 ```ts
-import { agents, getAgentConfigDir } from 'unagents/env'
+import { agents, getAgentConfigDir } from 'unagent/env'
 
 const dir = getAgentConfigDir(agents['claude-code'])
 // → "/Users/you/.claude"
@@ -114,7 +114,7 @@ const xdg = getXDGPaths()
 Record of all 40+ supported agents.
 
 ```ts
-import { agents } from 'unagents/env'
+import { agents } from 'unagent/env'
 
 const claude = agents['claude-code']
 // → { name: 'Claude Code', configDir: '~/.claude', rulesFile: 'CLAUDE.md', ... }
@@ -150,7 +150,7 @@ const all = getAllAgents()
 Re-exported from `std-env`:
 
 ```ts
-import { hasTTY, isCI } from 'unagents/env'
+import { hasTTY, isCI } from 'unagent/env'
 
 if (hasTTY) {
   // Interactive terminal

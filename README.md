@@ -1,7 +1,7 @@
 # unagent
 
-[![npm version](https://img.shields.io/npm/v/unagents?color=f43f5e)](https://npmjs.com/package/unagents)
-[![npm downloads](https://img.shields.io/npm/dm/unagents?color=f43f5e)](https://npmjs.com/package/unagents)
+[![npm version](https://img.shields.io/npm/v/unagent?color=f43f5e)](https://npmjs.com/package/unagent)
+[![npm downloads](https://img.shields.io/npm/dm/unagent?color=f43f5e)](https://npmjs.com/package/unagent)
 
 Unified primitives for AI coding agents.
 
@@ -15,13 +15,13 @@ Unified primitives for AI coding agents.
 ## Install
 
 ```bash
-npm install unagents
+npm install unagent
 ```
 
 ## Usage
 
 ```ts
-import { detectCurrentAgent, discoverSkills, parseSource } from 'unagents'
+import { detectCurrentAgent, discoverSkills, parseSource } from 'unagent'
 
 // Detect which agent is running
 const agent = detectCurrentAgent()

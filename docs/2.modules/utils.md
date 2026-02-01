@@ -7,7 +7,7 @@ icon: i-lucide-wrench
 Utility functions for ANSI colors, formatting, and path manipulation.
 
 ```ts
-import { bold, formatList, red, shortenPath } from 'unagents/utils'
+import { bold, formatList, red, shortenPath } from 'unagent/utils'
 ```
 
 ## ANSI Colors
@@ -17,7 +17,7 @@ import { bold, formatList, red, shortenPath } from 'unagents/utils'
 Apply colors to strings:
 
 ```ts
-import { blue, bold, cyan, dim, gray, green, red, yellow } from 'unagents/utils'
+import { blue, bold, cyan, dim, gray, green, red, yellow } from 'unagent/utils'
 
 console.log(bold('Important'))
 console.log(red('Error!'))
@@ -31,7 +31,7 @@ console.log(dim('Muted text'))
 Raw ANSI escape codes:
 
 ```ts
-import { ANSI } from 'unagents/utils'
+import { ANSI } from 'unagent/utils'
 
 ANSI.reset // '\x1B[0m'
 ANSI.bold // '\x1B[1m'
@@ -115,7 +115,7 @@ expandPath('./relative')
 ## Example: CLI Output
 
 ```ts
-import { bold, formatList, green, pluralize, red, shortenPath } from 'unagents/utils'
+import { bold, formatList, green, pluralize, red, shortenPath } from 'unagent/utils'
 
 function printInstallSummary(installed: string[], failed: string[]) {
   if (installed.length > 0) {

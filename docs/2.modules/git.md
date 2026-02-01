@@ -7,7 +7,7 @@ icon: i-lucide-git-branch
 Git operations for cloning repos and checking status.
 
 ```ts
-import { cloneRepo, cloneToTemp, getGitStatus } from 'unagents/git'
+import { cloneRepo, cloneToTemp, getGitStatus } from 'unagent/git'
 ```
 
 ## Cloning
@@ -177,7 +177,7 @@ class GitCloneError extends Error {
 ## Example: Clone and Inspect
 
 ```ts
-import { cleanupTempDir, cloneToTemp, getGitStatus } from 'unagents/git'
+import { cleanupTempDir, cloneToTemp, getGitStatus } from 'unagent/git'
 
 async function inspectRepo(url: string) {
   const { success, path, error } = await cloneToTemp(url)

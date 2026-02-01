@@ -7,7 +7,7 @@ icon: i-lucide-lock
 Manage `skill.lock` files for tracking installed skills.
 
 ```ts
-import { addSkillToLock, readSkillLock, writeSkillLock } from 'unagents/lock'
+import { addSkillToLock, readSkillLock, writeSkillLock } from 'unagent/lock'
 ```
 
 ## Lockfile Operations
@@ -178,7 +178,7 @@ The `skill.lock` file is JSON:
 ## Example: Install with Lock
 
 ```ts
-import { addSkillToLock, computeDirectoryHash, hasSkillInLock, readSkillLock, writeSkillLock } from 'unagents/lock'
+import { addSkillToLock, computeDirectoryHash, hasSkillInLock, readSkillLock, writeSkillLock } from 'unagent/lock'
 
 async function installSkill(skillsDir: string, source: string, name: string) {
   const lock = readSkillLock(skillsDir)

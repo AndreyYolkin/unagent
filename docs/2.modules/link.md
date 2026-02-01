@@ -7,7 +7,7 @@ icon: i-lucide-folder-symlink
 File copy and symlink utilities with safety checks.
 
 ```ts
-import { copyDirectory, createSymlink, sanitizeName } from 'unagents/link'
+import { copyDirectory, createSymlink, sanitizeName } from 'unagent/link'
 ```
 
 ## Copying
@@ -160,7 +160,7 @@ interface SymlinkResult {
 
 ```ts
 import { join } from 'pathe'
-import { copyDirectory, sanitizeName } from 'unagents/link'
+import { copyDirectory, sanitizeName } from 'unagent/link'
 
 function installSkill(sourcePath: string, skillsDir: string, name: string) {
   const safeName = sanitizeName(name)

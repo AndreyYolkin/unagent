@@ -7,7 +7,7 @@ icon: i-lucide-file-text
 The skill module discovers and parses [agentskills.io](https://agentskills.io/specification) compliant skill files. Use it to load skills from directories and validate them against the specification.
 
 ```ts
-import { discoverSkills, parseSkillMd, toPromptXml, validateSkill } from 'unagents/skill'
+import { discoverSkills, parseSkillMd, toPromptXml, validateSkill } from 'unagent/skill'
 ```
 
 ## Skill Directory Format
