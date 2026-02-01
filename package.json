@@ -34,7 +34,7 @@
     "test": "vitest",
     "release": "bumpp",
     "prepare": "simple-git-hooks",
-    "prepublishOnly": "nr build"
+    "prepublishOnly": "pnpm run build"
   },
   "dependencies": {
     "pathe": "catalog:",
