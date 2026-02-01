@@ -1,5 +1,5 @@
 import { existsSync, lstatSync, mkdirSync, symlinkSync, unlinkSync } from 'node:fs'
-import { dirname, relative } from 'node:path'
+import { dirname, relative } from 'pathe'
 import { validateSymlinkTarget } from './sanitize'
 
 export interface SymlinkOptions {

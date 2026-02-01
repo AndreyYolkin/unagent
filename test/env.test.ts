@@ -34,8 +34,8 @@ describe('env/paths', () => {
     expect(paths.state).toBeDefined()
   })
 
-  it('isCI returns boolean', () => {
-    expect(typeof isCI()).toBe('boolean')
+  it('isCI is a boolean', () => {
+    expect(typeof isCI).toBe('boolean')
   })
 })
 

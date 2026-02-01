@@ -1,6 +1,6 @@
 import { homedir } from 'node:os'
 import { describe, expect, it } from 'vitest'
-import { expandPath, formatList, normalizePath, pluralize, shortenPath, stripAnsi, truncate } from '../src/utils'
+import { expandPath, formatList, pluralize, shortenPath, stripAnsi, truncate } from '../src/utils'
 
 describe('utils/path', () => {
   it('shortenPath replaces home with ~', () => {
@@ -13,9 +13,6 @@ describe('utils/path', () => {
     expect(expandPath('~/test')).toBe(`${home}/test`)
   })
 
-  it('normalizePath converts backslashes', () => {
-    expect(normalizePath('a\\b\\c')).toBe('a/b/c')
-  })
 })
 
 describe('utils/format', () => {

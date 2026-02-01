@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto'
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
-import { join } from 'node:path'
+import { join } from 'pathe'
 
 export function computeContentHash(content: string): string {
   return createHash('sha256').update(content).digest('hex').slice(0, 16)

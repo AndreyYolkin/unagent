@@ -1,4 +1,4 @@
-import { isAbsolute, normalize, relative, resolve } from 'node:path'
+import { isAbsolute, normalize, relative, resolve } from 'pathe'
 
 export function sanitizeName(name: string): string {
   return name

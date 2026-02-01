@@ -1,5 +1,5 @@
 import { homedir } from 'node:os'
-import { relative, resolve } from 'node:path'
+import { relative, resolve } from 'pathe'
 
 export function shortenPath(filepath: string, cwd?: string): string {
   const home = homedir()
@@ -26,6 +26,3 @@ export function expandPath(filepath: string): string {
   return resolve(filepath)
 }
 
-export function normalizePath(filepath: string): string {
-  return filepath.replace(/\\/g, '/')
-}

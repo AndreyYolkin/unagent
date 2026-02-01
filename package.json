@@ -68,7 +68,9 @@
   },
   "dependencies": {
     "gray-matter": "^4.0.0",
-    "simple-git": "^3.0.0"
+    "pathe": "^2.0.3",
+    "simple-git": "^3.0.0",
+    "std-env": "^3.10.0"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^4.0.0",

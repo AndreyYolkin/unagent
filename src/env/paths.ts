@@ -1,7 +1,8 @@
 import type { AgentConfig } from './agents'
 import { existsSync } from 'node:fs'
 import { homedir } from 'node:os'
-import { join } from 'node:path'
+import { join } from 'pathe'
+import { hasTTY, isCI } from 'std-env'
 import { expandPath } from '../utils/path'
 
 export interface XDGPaths {
@@ -41,19 +42,7 @@ export function agentConfigExists(agent: AgentConfig): boolean {
   return existsSync(getAgentConfigDir(agent))
 }
 
-export function isCI(): boolean {
-  return !!(
-    process.env.CI
-    || process.env.CONTINUOUS_INTEGRATION
-    || process.env.BUILD_NUMBER
-    || process.env.GITHUB_ACTIONS
-    || process.env.GITLAB_CI
-    || process.env.CIRCLECI
-    || process.env.TRAVIS
-    || process.env.JENKINS_URL
-  )
-}
+export { hasTTY, isCI }
 
-export function isTTY(): boolean {
-  return !!(process.stdout.isTTY && process.stdin.isTTY)
-}
+/** @deprecated Use `hasTTY` from std-env instead */
+export const isTTY: boolean = hasTTY

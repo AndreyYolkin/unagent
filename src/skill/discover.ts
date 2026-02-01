@@ -1,6 +1,6 @@
 import type { ParsedSkill } from './parse'
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
-import { basename, extname, join } from 'node:path'
+import { basename, extname, join } from 'pathe'
 import { extractSkillName, parseSkillMd } from './parse'
 
 export interface DiscoveredSkill {

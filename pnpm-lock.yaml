@@ -11,9 +11,15 @@ importers:
       gray-matter:
         specifier: ^4.0.0
         version: 4.0.3
+      pathe:
+        specifier: ^2.0.3
+        version: 2.0.3
       simple-git:
         specifier: ^3.0.0
         version: 3.30.0
+      std-env:
+        specifier: ^3.10.0
+        version: 3.10.0
     devDependencies:
       '@antfu/eslint-config':
         specifier: ^4.0.0
