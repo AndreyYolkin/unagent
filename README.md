@@ -33,9 +33,9 @@ if (agent) {
 const skills = discoverSkills('~/.claude/skills', { recursive: true })
 
 // Parse source strings
-parseSource('unjs/unagent')          // github
+parseSource('unjs/unagent') // github
 parseSource('github:user/repo#main') // github with ref
-parseSource('./local/path')          // local
+parseSource('./local/path') // local
 ```
 
 ## Documentation
@@ -45,4 +45,3 @@ parseSource('./local/path')          // local
 ## License
 
 MIT
-
