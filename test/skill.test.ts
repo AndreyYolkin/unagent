@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, rmSync, writeFileSync } from 'node:fs'
+import { mkdirSync, rmSync, writeFileSync } from 'node:fs'
 import { join } from 'pathe'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { discoverSkills, extractSkillName, filterSkills, parseSkillMd, toPromptXml, validateSkill, validateSkillMd } from '../src/skill'

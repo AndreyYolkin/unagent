@@ -18,7 +18,8 @@ const SKILL_FILE = 'SKILL.md'
 export function discoverSkills(dir: string, options: DiscoverOptions = {}): DiscoveredSkill[] {
   const { recursive = false } = options
 
-  if (!existsSync(dir)) return []
+  if (!existsSync(dir))
+    return []
 
   const skills: DiscoveredSkill[] = []
   const entries = readdirSync(dir)
@@ -27,7 +28,8 @@ export function discoverSkills(dir: string, options: DiscoverOptions = {}): Disc
     const fullPath = join(dir, entry)
     const stat = statSync(fullPath)
 
-    if (!stat.isDirectory()) continue
+    if (!stat.isDirectory())
+      continue
 
     const skillFile = join(fullPath, SKILL_FILE)
     if (existsSync(skillFile)) {

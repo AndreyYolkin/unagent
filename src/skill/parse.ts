@@ -2,19 +2,19 @@ import matter from 'gray-matter'
 
 export interface SkillFrontmatter {
   // Required by agentskills.io spec
-  name: string // lowercase, hyphens, 1-64 chars
-  description: string // 1-1024 chars
+  'name': string // lowercase, hyphens, 1-64 chars
+  'description': string // 1-1024 chars
 
   // Optional per spec
-  license?: string
-  compatibility?: string // max 500 chars
-  metadata?: Record<string, string>
+  'license'?: string
+  'compatibility'?: string // max 500 chars
+  'metadata'?: Record<string, string>
   'allowed-tools'?: string // space-delimited
 
   // Extended (not in spec, for agent-specific use)
-  globs?: string | string[]
-  alwaysApply?: boolean
-  tags?: string[]
+  'globs'?: string | string[]
+  'alwaysApply'?: boolean
+  'tags'?: string[]
 }
 
 export interface ParsedSkill {

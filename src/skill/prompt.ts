@@ -1,7 +1,8 @@
 import type { DiscoveredSkill } from './discover'
 
 export function toPromptXml(skills: DiscoveredSkill[]): string {
-  if (skills.length === 0) return ''
+  if (skills.length === 0)
+    return ''
 
   const skillsXml = skills.map((skill) => {
     return `  <skill>

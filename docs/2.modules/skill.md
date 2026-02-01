@@ -4,15 +4,15 @@ icon: i-lucide-file-text
 
 # skill
 
-Discover and parse [agentskills.io](https://agentskills.io/specification) compliant skill files.
+The skill module discovers and parses [agentskills.io](https://agentskills.io/specification) compliant skill files. Use it to load skills from directories and validate them against the specification.
 
 ```ts
-import { discoverSkills, parseSkillMd, validateSkill, toPromptXml } from 'unagents/skill'
+import { discoverSkills, parseSkillMd, toPromptXml, validateSkill } from 'unagents/skill'
 ```
 
 ## Skill Directory Format
 
-Skills follow [agentskills.io spec](https://agentskills.io/specification): each skill is a **directory** containing `SKILL.md`.
+Skills follow the [agentskills.io spec](https://agentskills.io/specification). Each skill is a directory containing a `SKILL.md` file.
 
 ```
 skills/
@@ -23,6 +23,8 @@ skills/
 ```
 
 ### SKILL.md Format
+
+The `SKILL.md` file contains YAML frontmatter with metadata and markdown content with instructions.
 
 ```md [pdf-processing/SKILL.md]
 ---
@@ -43,9 +45,11 @@ Your instructions for the agent go here...
 
 ## Parsing
 
-### `parseSkillMd(content)`
+The parsing functions extract frontmatter and content from skill files.
 
-Parse a skill markdown file with frontmatter.
+### parseSkillMd
+
+This function parses a skill markdown file and returns structured data.
 
 ```ts
 const parsed = parseSkillMd(`---
@@ -57,67 +61,72 @@ You are a TypeScript expert...
 `)
 
 parsed.frontmatter // { name, description, globs, ... }
-parsed.content     // "You are a TypeScript expert..."
-parsed.raw         // Original content
+parsed.content // "You are a TypeScript expert..."
+parsed.raw // Original content
 ```
 
-### `extractSkillName(frontmatter, filename?)`
+### extractSkillName
 
-Extract skill name from frontmatter or filename.
+This function extracts the skill name from frontmatter or falls back to the filename.
 
 ```ts
-extractSkillName({ name: 'my-skill', description: 'test' })  // "my-skill"
-extractSkillName({ name: '', description: '' }, 'my-skill.md')  // "my skill"
+extractSkillName({ name: 'my-skill', description: 'test' }) // "my-skill"
+extractSkillName({ name: '', description: '' }, 'my-skill.md') // "my skill"
 ```
 
 ## Validation
 
-### `validateSkill(parsed, dirName?)`
+The validation function checks skills against the agentskills.io specification.
 
-Validate a skill against [agentskills.io spec](https://agentskills.io/specification).
+### validateSkill
+
+This function validates a parsed skill and returns errors and warnings.
 
 ```ts
 const result = validateSkill(parsed, 'pdf-processing')
 
-result.valid     // true if no errors
-result.errors    // ["name is required", ...]
-result.warnings  // ["skill content is empty", ...]
+result.valid // true if no errors
+result.errors // ["name is required", ...]
+result.warnings // ["skill content is empty", ...]
 ```
 
-Validation rules:
-- `name`: required, 1-64 chars, lowercase + hyphens only, no `--`, must match dir name
-- `description`: required, 1-1024 chars
-- `compatibility`: max 500 chars if present
+The function enforces these rules:
+
+- `name` must be 1-64 characters, lowercase with hyphens only, no consecutive hyphens, and must match the directory name
+- `description` must be 1-1024 characters
+- `compatibility` must be 500 characters or fewer when present
 
 ## Discovery
 
-### `discoverSkills(dir, options?)`
+The discovery functions find and load skills from the filesystem.
 
-Find all skill directories (containing `SKILL.md`).
+### discoverSkills
+
+This function scans a directory for skill directories containing `SKILL.md`.
 
 ```ts
 const skills = discoverSkills('~/.claude/skills', {
-  recursive: true,  // Search nested directories
+  recursive: true, // Search nested directories
 })
 
 for (const skill of skills) {
-  console.log(skill.name)    // Directory name (= skill name)
-  console.log(skill.path)    // Full directory path
-  console.log(skill.parsed)  // ParsedSkill object
+  console.log(skill.name) // Directory name (= skill name)
+  console.log(skill.path) // Full directory path
+  console.log(skill.parsed) // ParsedSkill object
 }
 ```
 
-### `filterSkills(skills, query)`
+### filterSkills
 
-Filter skills by name, description, or tags.
+This function filters skills by name, description, or tags.
 
 ```ts
 const tsSkills = filterSkills(skills, 'typescript')
 ```
 
-### `findSkillByName(skills, name)`
+### findSkillByName
 
-Find a skill by exact name match.
+This function finds a skill by exact name match.
 
 ```ts
 const skill = findSkillByName(skills, 'pdf-processing')
@@ -125,15 +134,18 @@ const skill = findSkillByName(skills, 'pdf-processing')
 
 ## Prompt Generation
 
-### `toPromptXml(skills)`
+The prompt generation function creates XML output for agent system prompts.
 
-Generate XML for agent system prompts (per spec).
+### toPromptXml
+
+This function generates XML following the agentskills.io specification format.
 
 ```ts
 const xml = toPromptXml(skills)
 ```
 
-Output:
+The output follows this structure:
+
 ```xml
 <available_skills>
   <skill>
@@ -149,19 +161,19 @@ Output:
 ```ts
 interface SkillFrontmatter {
   // Required by spec
-  name: string         // lowercase, hyphens, 1-64 chars
-  description: string  // 1-1024 chars
+  'name': string // lowercase, hyphens, 1-64 chars
+  'description': string // 1-1024 chars
 
   // Optional per spec
-  license?: string
-  compatibility?: string        // max 500 chars
-  metadata?: Record<string, string>
-  'allowed-tools'?: string      // space-delimited
+  'license'?: string
+  'compatibility'?: string // max 500 chars
+  'metadata'?: Record<string, string>
+  'allowed-tools'?: string // space-delimited
 
   // Extended (agent-specific)
-  globs?: string | string[]
-  alwaysApply?: boolean
-  tags?: string[]
+  'globs'?: string | string[]
+  'alwaysApply'?: boolean
+  'tags'?: string[]
 }
 
 interface ParsedSkill {
@@ -171,8 +183,8 @@ interface ParsedSkill {
 }
 
 interface DiscoveredSkill {
-  path: string     // Directory path
-  name: string     // Directory name
+  path: string // Directory path
+  name: string // Directory name
   parsed: ParsedSkill
 }
 
@@ -191,7 +203,7 @@ interface ValidationResult {
 
 | Field | Type | Spec | Description |
 |-------|------|------|-------------|
-| `name` | `string` | Required | Skill identifier (lowercase, hyphens) |
+| `name` | `string` | Required | Skill identifier using lowercase and hyphens |
 | `description` | `string` | Required | Short description (max 1024 chars) |
 | `license` | `string` | Optional | SPDX license identifier |
 | `compatibility` | `string` | Optional | Supported agents (max 500 chars) |
