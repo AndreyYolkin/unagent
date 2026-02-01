@@ -19,8 +19,8 @@ Detect which agent is currently running based on environment variables.
 ```ts
 const agent = detectCurrentAgent()
 if (agent) {
-  console.log(agent.config.name)  // "Claude Code"
-  console.log(agent.detected)      // "env" | "config" | "both"
+  console.log(agent.config.name) // "Claude Code"
+  console.log(agent.detected) // "env" | "config" | "both"
 }
 ```
 

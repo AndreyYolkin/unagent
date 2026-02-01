@@ -25,4 +25,3 @@ export function expandPath(filepath: string): string {
   }
   return resolve(filepath)
 }
-

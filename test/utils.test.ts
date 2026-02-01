@@ -12,7 +12,6 @@ describe('utils/path', () => {
     const home = homedir()
     expect(expandPath('~/test')).toBe(`${home}/test`)
   })
-
 })
 
 describe('utils/format', () => {

@@ -18,14 +18,15 @@ Copy a directory recursively.
 
 ```ts
 const result = copyDirectory('./source', './dest', {
-  force: false,             // Overwrite if exists (default: false)
-  exclude: ['.git', 'node_modules', '.DS_Store', 'Thumbs.db'],  // Exclude patterns
+  force: false, // Overwrite if exists (default: false)
+  exclude: ['.git', 'node_modules', '.DS_Store', 'Thumbs.db'], // Exclude patterns
   preserveTimestamps: true, // Keep original timestamps (default: true)
 })
 
 if (result.success) {
   console.log(`Copied ${result.filesCopied} files`)
-} else {
+}
+else {
   console.error(result.error)
 }
 ```
@@ -56,8 +57,8 @@ Create a symlink safely.
 
 ```ts
 const result = createSymlink('./target', './link', {
-  force: false,    // Overwrite existing (default: false)
-  relative: true,  // Use relative path (default: true)
+  force: false, // Overwrite existing (default: false)
+  relative: true, // Use relative path (default: true)
 })
 
 if (result.success) {
@@ -83,7 +84,7 @@ if (isSymlink('./my-link')) {
 Remove a symlink.
 
 ```ts
-removeSymlink('./my-link')  // true if removed
+removeSymlink('./my-link') // true if removed
 ```
 
 ## Sanitization
@@ -93,9 +94,9 @@ removeSymlink('./my-link')  // true if removed
 Sanitize a name for use as filename.
 
 ```ts
-sanitizeName('My Skill!')      // "my-skill"
-sanitizeName('test__name')     // "test-name"
-sanitizeName('UPPER-case')     // "upper-case"
+sanitizeName('My Skill!') // "my-skill"
+sanitizeName('test__name') // "test-name"
+sanitizeName('UPPER-case') // "upper-case"
 ```
 
 Transforms:
@@ -110,9 +111,9 @@ Transforms:
 Check if a path is safe (doesn't escape baseDir).
 
 ```ts
-isPathSafe('sub/dir', '/base')     // true
-isPathSafe('../escape', '/base')   // false
-isPathSafe('/absolute', '/base')   // false
+isPathSafe('sub/dir', '/base') // true
+isPathSafe('../escape', '/base') // false
+isPathSafe('/absolute', '/base') // false
 ```
 
 ### `validateSymlinkTarget(target)`
@@ -120,17 +121,17 @@ isPathSafe('/absolute', '/base')   // false
 Validate symlink target is safe.
 
 ```ts
-validateSymlinkTarget('./valid')  // true
-validateSymlinkTarget('')         // false
-validateSymlinkTarget('a'.repeat(5000))  // false (too long)
+validateSymlinkTarget('./valid') // true
+validateSymlinkTarget('') // false
+validateSymlinkTarget('a'.repeat(5000)) // false (too long)
 ```
 
 ## Types
 
 ```ts
 interface CopyOptions {
-  force?: boolean           // Overwrite existing
-  exclude?: string[]        // Patterns to exclude
+  force?: boolean // Overwrite existing
+  exclude?: string[] // Patterns to exclude
   preserveTimestamps?: boolean
 }
 
@@ -143,7 +144,7 @@ interface CopyResult {
 }
 
 interface SymlinkOptions {
-  force?: boolean    // Overwrite existing
+  force?: boolean // Overwrite existing
   relative?: boolean // Use relative paths
 }
 
@@ -158,8 +159,8 @@ interface SymlinkResult {
 ## Example: Install Skill
 
 ```ts
-import { copyDirectory, sanitizeName } from 'unagents/link'
 import { join } from 'pathe'
+import { copyDirectory, sanitizeName } from 'unagents/link'
 
 function installSkill(sourcePath: string, skillsDir: string, name: string) {
   const safeName = sanitizeName(name)

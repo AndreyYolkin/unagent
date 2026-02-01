@@ -18,14 +18,15 @@ Clone a repository to a specific path.
 
 ```ts
 const result = await cloneRepo('https://github.com/unjs/unagent.git', './unagent', {
-  depth: 1,        // Shallow clone (default: 1)
-  branch: 'main',  // Specific branch
-  timeout: 60000,  // Timeout in ms (default: 60000)
+  depth: 1, // Shallow clone (default: 1)
+  branch: 'main', // Specific branch
+  timeout: 60000, // Timeout in ms (default: 60000)
 })
 
 if (result.success) {
   console.log(`Cloned to ${result.path}`)
-} else {
+}
+else {
   console.error(result.error)
 }
 ```
@@ -44,7 +45,7 @@ const result = await cloneToTemp('https://github.com/unjs/unagent.git')
 Safely remove a temp directory. Only removes paths inside system temp dir.
 
 ```ts
-cleanupTempDir(result.path)  // true if removed
+cleanupTempDir(result.path) // true if removed
 ```
 
 ### `isTempDir(path)`
@@ -52,8 +53,8 @@ cleanupTempDir(result.path)  // true if removed
 Check if path is inside temp directory.
 
 ```ts
-isTempDir('/tmp/unagent-123')  // true
-isTempDir('/home/user/code')   // false
+isTempDir('/tmp/unagent-123') // true
+isTempDir('/home/user/code') // false
 ```
 
 ## Status
@@ -66,13 +67,13 @@ Get comprehensive git status.
 const status = await getGitStatus('./my-repo')
 
 if (status) {
-  console.log(status.branch)     // "main"
+  console.log(status.branch) // "main"
   console.log(status.hasChanges) // true/false
-  console.log(status.staged)     // ["file.ts"]
-  console.log(status.modified)   // ["other.ts"]
-  console.log(status.untracked)  // ["new.ts"]
-  console.log(status.ahead)      // 2
-  console.log(status.behind)     // 0
+  console.log(status.staged) // ["file.ts"]
+  console.log(status.modified) // ["other.ts"]
+  console.log(status.untracked) // ["new.ts"]
+  console.log(status.ahead) // 2
+  console.log(status.behind) // 0
 }
 ```
 
@@ -81,7 +82,7 @@ if (status) {
 Get current branch name.
 
 ```ts
-const branch = await getCurrentBranch('./repo')  // "main"
+const branch = await getCurrentBranch('./repo') // "main"
 ```
 
 ### `hasUncommittedChanges(dir)`
@@ -101,8 +102,8 @@ if (await hasUncommittedChanges('./repo')) {
 Checkout a branch or ref.
 
 ```ts
-await checkout('./repo', 'feature-branch')  // true if success
-await checkout('./repo', 'v1.0.0')          // checkout tag
+await checkout('./repo', 'feature-branch') // true if success
+await checkout('./repo', 'v1.0.0') // checkout tag
 ```
 
 ### `pull(dir)`
@@ -110,7 +111,7 @@ await checkout('./repo', 'v1.0.0')          // checkout tag
 Pull latest changes.
 
 ```ts
-await pull('./repo')  // true if success
+await pull('./repo') // true if success
 ```
 
 ### `fetch(dir, remote?)`
@@ -118,7 +119,7 @@ await pull('./repo')  // true if success
 Fetch from remote.
 
 ```ts
-await fetch('./repo')           // fetch from 'origin'
+await fetch('./repo') // fetch from 'origin'
 await fetch('./repo', 'upstream')
 ```
 
@@ -144,10 +145,10 @@ const hash = await getLatestCommitHash('./repo')
 
 ```ts
 interface CloneOptions {
-  depth?: number      // Shallow clone depth (default: 1)
-  branch?: string     // Branch to clone
-  timeout?: number    // Timeout in ms (default: 60000)
-  tempDir?: string    // Custom temp directory
+  depth?: number // Shallow clone depth (default: 1)
+  branch?: string // Branch to clone
+  timeout?: number // Timeout in ms (default: 60000)
+  tempDir?: string // Custom temp directory
 }
 
 interface CloneResult {
@@ -176,7 +177,7 @@ class GitCloneError extends Error {
 ## Example: Clone and Inspect
 
 ```ts
-import { cloneToTemp, cleanupTempDir, getGitStatus } from 'unagents/git'
+import { cleanupTempDir, cloneToTemp, getGitStatus } from 'unagents/git'
 
 async function inspectRepo(url: string) {
   const { success, path, error } = await cloneToTemp(url)
@@ -189,7 +190,8 @@ async function inspectRepo(url: string) {
     const status = await getGitStatus(path)
     console.log(`Branch: ${status?.branch}`)
     return status
-  } finally {
+  }
+  finally {
     cleanupTempDir(path)
   }
 }

@@ -7,7 +7,7 @@ icon: i-lucide-link
 Parse source strings into structured data. Supports GitHub, GitLab, URLs, and local paths.
 
 ```ts
-import { parseSource, isLocalPath, isUrl } from 'unagents/source'
+import { isLocalPath, isUrl, parseSource } from 'unagents/source'
 ```
 
 ## Parsing
@@ -51,10 +51,10 @@ parseSource('https://example.com/skill.md')
 Check if a source string is a local path.
 
 ```ts
-isLocalPath('./src')           // true
-isLocalPath('~/skills')        // true
-isLocalPath('/absolute/path')  // true
-isLocalPath('unjs/unagent')    // false
+isLocalPath('./src') // true
+isLocalPath('~/skills') // true
+isLocalPath('/absolute/path') // true
+isLocalPath('unjs/unagent') // false
 ```
 
 ### `isUrl(source)`
@@ -62,9 +62,9 @@ isLocalPath('unjs/unagent')    // false
 Check if a source string is a URL.
 
 ```ts
-isUrl('https://github.com/...')  // true
-isUrl('github:user/repo')        // true
-isUrl('./local')                 // false
+isUrl('https://github.com/...') // true
+isUrl('github:user/repo') // true
+isUrl('./local') // false
 ```
 
 ## Helpers
@@ -75,7 +75,7 @@ Get `owner/repo` string from parsed source.
 
 ```ts
 const parsed = parseSource('github:unjs/unagent')
-getOwnerRepo(parsed)  // "unjs/unagent"
+getOwnerRepo(parsed) // "unjs/unagent"
 ```
 
 ### `parseOwnerRepo(ownerRepo)`
@@ -94,9 +94,9 @@ parseOwnerRepo('unjs/unagent')
 Detect provider from URL.
 
 ```ts
-getProviderFromUrl('https://github.com/...')   // 'github'
-getProviderFromUrl('https://gitlab.com/...')   // 'gitlab'
-getProviderFromUrl('https://example.com/...')  // 'url'
+getProviderFromUrl('https://github.com/...') // 'github'
+getProviderFromUrl('https://gitlab.com/...') // 'gitlab'
+getProviderFromUrl('https://example.com/...') // 'url'
 ```
 
 ### `parseGitHubUrl(url)`
