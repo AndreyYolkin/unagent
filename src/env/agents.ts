@@ -322,6 +322,14 @@ export const agents: Record<string, AgentConfig> = {
     envDetect: ['CODEGPT_API_KEY'],
     description: 'VS Code AI extension',
   },
+  'trae': {
+    name: 'Trae AI',
+    configDir: '~/.trae',
+    rulesFile: 'rules/project_rules.md',
+    skillsDir: 'skills',
+    envDetect: ['TRAE_AI_SHELL_ID'],
+    description: 'AI-powered code editor',
+  },
 }
 
 export function getAgentConfig(agentId: string): AgentConfig | undefined {
