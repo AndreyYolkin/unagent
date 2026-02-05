@@ -1,4 +1,4 @@
-export type SandboxProvider = 'vercel' | 'cloudflare'
+export type SandboxProvider = 'vercel' | 'cloudflare' | 'deno'
 
 // === Exec Options ===
 export interface SandboxExecOptions {
@@ -91,7 +91,24 @@ export interface CloudflareProviderOptions {
   getSandbox?: <T extends CloudflareSandboxStub>(ns: DurableObjectNamespaceLike, id: string, opts?: CloudflareSandboxOptions) => T
 }
 
-export type SandboxProviderOptions = VercelProviderOptions | CloudflareProviderOptions
+export interface DenoProviderOptions {
+  name: 'deno'
+  allowNet?: string[]
+  debug?: boolean
+  env?: Record<string, string>
+  labels?: Record<string, string>
+  memory?: string | number
+  port?: number
+  region?: string
+  root?: string
+  sandboxEndpoint?: string
+  secrets?: Record<string, { hosts: string[], value: string }>
+  ssh?: boolean
+  timeout?: `${number}s` | `${number}m` | 'session'
+  volumes?: Record<string, string>
+}
+
+export type SandboxProviderOptions = VercelProviderOptions | CloudflareProviderOptions | DenoProviderOptions
 
 export interface SandboxOptions {
   provider?: SandboxProviderOptions

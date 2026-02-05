@@ -141,6 +141,7 @@
     "@ai-sdk/mistral": ">=0.0.0",
     "@ai-sdk/openai": ">=0.0.0",
     "@cloudflare/sandbox": ">=0.1.0",
+    "@deno/sandbox": ">=0.1.0",
     "@huggingface/transformers": ">=0.0.0",
     "@libsql/client": ">=0.0.0",
     "@pinecone-database/pinecone": ">=0.0.0",
@@ -168,6 +169,9 @@
       "optional": true
     },
     "@cloudflare/sandbox": {
+      "optional": true
+    },
+    "@deno/sandbox": {
       "optional": true
     },
     "@huggingface/transformers": {

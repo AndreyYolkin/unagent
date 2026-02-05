@@ -1,8 +1,10 @@
 import type { CloudflareProcessInfo, CloudflareSandboxStub } from '../src/sandbox/types/common'
+import type { ChildProcess, ChildProcessOutput, ChildProcessStatus, DenoSandboxInstance } from '../src/sandbox/types/deno'
 import type { VercelCommandResult, VercelSandboxInstance } from '../src/sandbox/types/vercel'
 import { Readable } from 'node:stream'
 import { describe, expect, it, vi } from 'vitest'
 import { CloudflareSandboxAdapter } from '../src/sandbox/adapters/cloudflare'
+import { DenoSandboxAdapter } from '../src/sandbox/adapters/deno'
 import { VercelSandboxAdapter } from '../src/sandbox/adapters/vercel'
 import { SandboxError } from '../src/sandbox/errors'
 
@@ -26,6 +28,80 @@ function createCloudflareStub(overrides: Partial<CloudflareSandboxStub> = {}): C
 
 function sleep(ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms))
+}
+
+function createReadableStream(chunks: string[]): ReadableStream<Uint8Array> {
+  const encoder = new TextEncoder()
+  return new ReadableStream({
+    start(controller) {
+      for (const chunk of chunks) {
+        controller.enqueue(encoder.encode(chunk))
+      }
+      controller.close()
+    },
+  })
+}
+
+function createDenoSandboxStub(overrides: Partial<DenoSandboxInstance> = {}): DenoSandboxInstance {
+  const files = new Map<string, string>()
+  const status: ChildProcessStatus = { success: true, code: 0, signal: null }
+  const output: ChildProcessOutput = {
+    status,
+    stdout: new TextEncoder().encode('hello\\n'),
+    stderr: new TextEncoder().encode(''),
+    stdoutText: 'hello\\n',
+    stderrText: '',
+  }
+  const child: ChildProcess = {
+    pid: 1,
+    status: Promise.resolve(status),
+    stdin: null,
+    stdout: createReadableStream(['ready\\n']),
+    stderr: createReadableStream([]),
+    [Symbol.asyncDispose]: async () => {},
+    kill: async () => {},
+    output: async () => output,
+  }
+
+  return {
+    id: 'deno-1',
+    closed: Promise.resolve(),
+    deno: {
+      deploy: async () => ({}),
+      eval: async () => ({}),
+      repl: async () => child,
+      run: async () => child,
+    },
+    env: {
+      get: async key => files.get(`env:${key}`),
+      set: async (key, value) => { files.set(`env:${key}`, value) },
+      delete: async (key) => { files.delete(`env:${key}`) },
+      toObject: async () => ({}),
+    },
+    fs: {
+      readTextFile: async path => files.get(path) ?? '',
+      readFile: async path => new TextEncoder().encode(files.get(path) ?? ''),
+      writeTextFile: async (path, data) => { files.set(path, data) },
+      mkdir: async () => {},
+      async* readDir() {},
+      stat: async () => ({ size: 0, isFile: true, isDirectory: false, isSymlink: false }),
+      remove: async () => {},
+      rename: async () => {},
+    },
+    ssh: { username: 'deno', hostname: 'sandbox.local' },
+    url: 'https://sandbox.local',
+    sh: () => ({ output: async () => output }),
+    close: async () => {},
+    exposeHttp: async () => 'https://sandbox.local/http',
+    exposeSsh: async () => ({ hostname: 'sandbox.local', username: 'deno' }),
+    exposeVscode: async () => ({ url: 'https://sandbox.local/vscode' }),
+    extendTimeout: async () => new Date(),
+    fetch: async () => new Response('ok'),
+    kill: async () => {},
+    spawn: async () => child,
+    [Symbol.asyncDispose]: async () => {},
+    ...overrides,
+  }
 }
 
 describe('sandbox adapters', () => {
@@ -129,5 +205,26 @@ describe('sandbox adapters', () => {
     const finalLogs = await process.logs()
     expect(finalLogs.stdout).toContain('tick 1')
     expect(finalLogs.stdout).toContain('tick 2')
+  })
+
+  it('deno adapter exec and file operations work', async () => {
+    const adapter = new DenoSandboxAdapter(createDenoSandboxStub())
+
+    const result = await adapter.exec('echo', ['hello'])
+    expect(result.ok).toBe(true)
+    expect(result.stdout).toBe('hello\\n')
+
+    await adapter.writeFile('/tmp/test.txt', 'hi')
+    await expect(adapter.readFile('/tmp/test.txt')).resolves.toBe('hi')
+  })
+
+  it('deno adapter startProcess exposes logs', async () => {
+    const adapter = new DenoSandboxAdapter(createDenoSandboxStub())
+    const process = await adapter.startProcess('echo', ['ready'])
+
+    const result = await process.waitForLog(/ready/)
+    expect(result.line).toContain('ready')
+    const logs = await process.logs()
+    expect(logs.stdout).toContain('ready')
   })
 })

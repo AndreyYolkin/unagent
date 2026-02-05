@@ -44,11 +44,19 @@ describe('sandbox/detectSandbox', () => {
     expect(result.type).toBe('docker')
   })
 
+  it('detects Deno Deploy via DENO_DEPLOYMENT_ID', () => {
+    process.env.DENO_DEPLOYMENT_ID = 'deploy-123'
+    const result = detectSandbox()
+    expect(result.type).toBe('deno')
+    expect(result.details?.deploymentId).toBe('deploy-123')
+  })
+
   it('returns none when no sandbox detected', () => {
     delete process.env.CLOUDFLARE_WORKER
     delete process.env.CF_PAGES
     delete process.env.VERCEL
     delete process.env.VERCEL_ENV
+    delete process.env.DENO_DEPLOYMENT_ID
     delete process.env.DOCKER_CONTAINER
     const result = detectSandbox()
     expect(result.type).toBe('none')
@@ -74,5 +82,9 @@ describe('sandbox/isSandboxAvailable', () => {
 
   it('returns true for cloudflare when package installed', () => {
     expect(isSandboxAvailable('cloudflare')).toBe(true)
+  })
+
+  it('returns true for deno when package installed', () => {
+    expect(isSandboxAvailable('deno')).toBe(true)
   })
 })

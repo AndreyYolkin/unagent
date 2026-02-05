@@ -1,5 +1,6 @@
 import type { CloudflareNamespace } from '../types/cloudflare'
 import type { FileEntry, ListFilesOptions, ProcessOptions, SandboxCapabilities, SandboxExecOptions, SandboxExecResult, SandboxProcess, SandboxProvider } from '../types/common'
+import type { DenoNamespace } from '../types/deno'
 import type { Sandbox } from '../types/index'
 import type { VercelNamespace } from '../types/vercel'
 import { NotSupportedError } from '../errors'
@@ -44,5 +45,9 @@ export abstract class BaseSandboxAdapter<P extends SandboxProvider = SandboxProv
 
   get cloudflare(): P extends 'cloudflare' ? CloudflareNamespace : never {
     throw new NotSupportedError('cloudflare namespace', this.provider)
+  }
+
+  get deno(): P extends 'deno' ? DenoNamespace : never {
+    throw new NotSupportedError('deno namespace', this.provider)
   }
 }

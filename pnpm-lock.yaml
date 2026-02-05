@@ -137,6 +137,9 @@ importers:
       '@cloudflare/sandbox':
         specifier: '>=0.1.0'
         version: 0.7.0
+      '@deno/sandbox':
+        specifier: '>=0.1.0'
+        version: 0.10.0
       '@huggingface/transformers':
         specifier: '>=0.0.0'
         version: 3.8.1
@@ -732,6 +735,15 @@ packages:
 
   '@datastructures-js/deque@1.0.8':
     resolution: {integrity: sha512-PSBhJ2/SmeRPRHuBv7i/fHWIdSC3JTyq56qb+Rq0wjOagi0/fdV5/B/3Md5zFZus/W6OkSPMaxMKKMNMrSmubg==}
+
+  '@deno/sandbox@0.10.0':
+    resolution: {integrity: sha512-Fq41hNE4H3kKGHyYvbtkyi26SGKCawWt3dbJE2dmSsWqCf3VErfqXBMBe7hBOySBbNwPQLUS+sHsHHelAGwzjg==}
+
+  '@deno/shim-deno-test@0.5.0':
+    resolution: {integrity: sha512-4nMhecpGlPi0cSzT67L+Tm+GOJqvuk8gqHBziqcUQOarnuIax1z96/gJHCSIz2Z0zhxE6Rzwb3IZXPtFh51j+w==}
+
+  '@deno/shim-deno@0.18.2':
+    resolution: {integrity: sha512-oQ0CVmOio63wlhwQF75zA4ioolPvOwAoK0yuzcS5bDC1JUvH3y1GS8xPh8EOpcoDQRU4FTG8OQfxhpR+c6DrzA==}
 
   '@dxup/nuxt@0.3.2':
     resolution: {integrity: sha512-2f2usP4oLNsIGjPprvABe3f3GWuIhIDp0169pGLFxTDRI5A4d4sBbGpR+tD9bGZCT+1Btb6Q2GKlyv3LkDCW5g==}
@@ -9434,6 +9446,11 @@ packages:
     engines: {node: '>= 8'}
     hasBin: true
 
+  which@4.0.0:
+    resolution: {integrity: sha512-GlaYyEb07DPxYCKhKzplCWBJtvxZcZMrL+4UkrTSJHHPyZU4mYYTv3qaOe77H7EODLSSopAUFAc6W8U4yqvscg==}
+    engines: {node: ^16.13.0 || >=18.0.0}
+    hasBin: true
+
   which@5.0.0:
     resolution: {integrity: sha512-JEdGzHwwkrbWoGOlIHqQ5gtprKGOenpDHpxE9zVR1bWbOtYRyPPHMe9FaP6x61CmNaTThSkb0DAJte5jD+DmzQ==}
     engines: {node: ^18.17.0 || >=20.5.0}
@@ -10360,6 +10377,22 @@ snapshots:
       '@jridgewell/trace-mapping': 0.3.9
 
   '@datastructures-js/deque@1.0.8': {}
+
+  '@deno/sandbox@0.10.0':
+    dependencies:
+      '@deno/shim-deno': 0.18.2
+      ws: 8.19.0
+      zod: 4.1.11
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
+
+  '@deno/shim-deno-test@0.5.0': {}
+
+  '@deno/shim-deno@0.18.2':
+    dependencies:
+      '@deno/shim-deno-test': 0.5.0
+      which: 4.0.0
 
   '@dxup/nuxt@0.3.2(magicast@0.5.1)':
     dependencies:
@@ -20355,6 +20388,10 @@ snapshots:
   which@2.0.2:
     dependencies:
       isexe: 2.0.0
+
+  which@4.0.0:
+    dependencies:
+      isexe: 3.1.1
 
   which@5.0.0:
     dependencies:

@@ -1,11 +1,11 @@
-import type { CloudflareProviderOptions, CloudflareSandbox, CloudflareSandboxOptions, CloudflareSandboxStub, DurableObjectNamespaceLike, Sandbox, SandboxOptions, VercelProviderOptions, VercelSandbox, VercelSandboxListItem, VercelSandboxSDK } from './types'
+import type { CloudflareProviderOptions, CloudflareSandbox, CloudflareSandboxOptions, CloudflareSandboxStub, DenoProviderOptions, DenoSandbox, DenoSandboxSDK, DurableObjectNamespaceLike, Sandbox, SandboxOptions, VercelProviderOptions, VercelSandbox, VercelSandboxListItem, VercelSandboxSDK } from './types'
 import { provider as envProvider, isWorkerd } from 'std-env'
-import { CloudflareSandboxAdapter, VercelSandboxAdapter } from './adapters'
+import { CloudflareSandboxAdapter, DenoSandboxAdapter, VercelSandboxAdapter } from './adapters'
 
 export { NotSupportedError, SandboxError } from './errors'
 
 export interface SandboxDetectionResult {
-  type: 'cloudflare' | 'vercel' | 'docker' | 'none'
+  type: 'cloudflare' | 'vercel' | 'deno' | 'docker' | 'none'
   details?: Record<string, unknown>
 }
 
@@ -16,12 +16,14 @@ export function detectSandbox(): SandboxDetectionResult {
     return { type: 'cloudflare', details: { runtime: 'pages' } }
   if (process.env.VERCEL || process.env.VERCEL_ENV)
     return { type: 'vercel', details: { env: process.env.VERCEL_ENV } }
+  if (process.env.DENO_DEPLOYMENT_ID)
+    return { type: 'deno', details: { deploymentId: process.env.DENO_DEPLOYMENT_ID } }
   if (process.env.DOCKER_CONTAINER)
     return { type: 'docker' }
   return { type: 'none' }
 }
 
-export function isSandboxAvailable(provider: 'vercel' | 'cloudflare'): boolean {
+export function isSandboxAvailable(provider: 'vercel' | 'cloudflare' | 'deno'): boolean {
   try {
     const resolver = (globalThis as { require?: { resolve?: (id: string) => string } }).require?.resolve
     if (!resolver)
@@ -34,6 +36,10 @@ export function isSandboxAvailable(provider: 'vercel' | 'cloudflare'): boolean {
       resolver('@cloudflare/sandbox')
       return true
     }
+    if (provider === 'deno') {
+      resolver('@deno/sandbox')
+      return true
+    }
   }
   catch {
     return false
@@ -42,7 +48,7 @@ export function isSandboxAvailable(provider: 'vercel' | 'cloudflare'): boolean {
 }
 
 // Re-exports
-export type { CloudflareNamespace, CloudflareProviderOptions, CloudflareSandbox, CloudflareSandboxOptions, CloudflareSession, CodeContext, CodeExecutionResult, DurableObjectNamespaceLike, ExposedPort, FileEntry, GitCheckoutResult, ListFilesOptions, NetworkPolicy, ProcessOptions, Sandbox, SandboxCapabilities, SandboxExecOptions, SandboxExecResult, SandboxOptions, SandboxProcess, SandboxProvider, VercelNamespace, VercelProviderOptions, VercelSandbox, VercelSandboxMetadata, VercelSnapshot, WaitForPortOptions } from './types'
+export type { CloudflareNamespace, CloudflareProviderOptions, CloudflareSandbox, CloudflareSandboxOptions, CloudflareSession, CodeContext, CodeExecutionResult, DenoNamespace, DenoProviderOptions, DenoSandbox, DenoSandboxOptions, DurableObjectNamespaceLike, ExposedPort, FileEntry, GitCheckoutResult, ListFilesOptions, NetworkPolicy, ProcessOptions, Sandbox, SandboxCapabilities, SandboxExecOptions, SandboxExecResult, SandboxOptions, SandboxProcess, SandboxProvider, VercelNamespace, VercelProviderOptions, VercelSandbox, VercelSandboxMetadata, VercelSnapshot, WaitForPortOptions } from './types'
 
 async function loadVercelSandbox(): Promise<VercelSandboxSDK> {
   const moduleName = '@vercel/sandbox'
@@ -64,9 +70,20 @@ async function loadCloudflareSandbox(): Promise<{ getSandbox: <T extends Cloudfl
   }
 }
 
+async function loadDenoSandbox(): Promise<DenoSandboxSDK> {
+  const moduleName = '@deno/sandbox'
+  try {
+    return await import(moduleName) as DenoSandboxSDK
+  }
+  catch (e) {
+    throw new Error(`${moduleName} load failed. Install it to use the Deno provider. Original error: ${e instanceof Error ? e.message : e}`)
+  }
+}
+
 // Factory overloads for type inference
 export function createSandbox(opts: { provider: VercelProviderOptions }): Promise<VercelSandbox>
 export function createSandbox(opts: { provider: CloudflareProviderOptions }): Promise<CloudflareSandbox>
+export function createSandbox(opts: { provider: DenoProviderOptions }): Promise<DenoSandbox>
 export function createSandbox(opts?: SandboxOptions): Promise<Sandbox>
 export async function createSandbox(options: SandboxOptions = {}): Promise<Sandbox> {
   const resolved = resolveProvider(options.provider)
@@ -95,14 +112,22 @@ export async function createSandbox(options: SandboxOptions = {}): Promise<Sandb
     return new CloudflareSandboxAdapter(id, stub)
   }
 
+  if (resolved.name === 'deno') {
+    const { name: _name, ...sandboxOptions } = resolved
+    const sdk = await loadDenoSandbox()
+    const instance = await sdk.Sandbox.create(sandboxOptions)
+    return new DenoSandboxAdapter(instance)
+  }
+
   throw new Error(`Unknown sandbox provider: ${(resolved as { name: string }).name}`)
 }
 
 type ResolvedProvider
   = | { name: 'vercel', runtime?: string, timeout?: number, cpu?: number, ports?: number[] }
     | { name: 'cloudflare', namespace?: DurableObjectNamespaceLike, sandboxId?: string, cloudflare?: CloudflareSandboxOptions, getSandbox?: <T extends CloudflareSandboxStub>(ns: DurableObjectNamespaceLike, id: string, opts?: CloudflareSandboxOptions) => T }
+    | DenoProviderOptions
 
-function resolveProvider(provider: VercelProviderOptions | CloudflareProviderOptions | undefined): ResolvedProvider {
+function resolveProvider(provider: VercelProviderOptions | CloudflareProviderOptions | DenoProviderOptions | undefined): ResolvedProvider {
   if (provider) {
     return provider
   }
@@ -111,12 +136,16 @@ function resolveProvider(provider: VercelProviderOptions | CloudflareProviderOpt
     return { name: 'cloudflare' }
   if (envProvider === 'vercel')
     return { name: 'vercel' }
+  if (envProvider === 'deno-deploy')
+    return { name: 'deno' }
 
   if (typeof process !== 'undefined') {
     if (process.env.CLOUDFLARE_WORKER || process.env.CF_PAGES)
       return { name: 'cloudflare' }
     if (process.env.VERCEL || process.env.VERCEL_ENV)
       return { name: 'vercel' }
+    if (process.env.DENO_DEPLOYMENT_ID)
+      return { name: 'deno' }
   }
 
   throw new Error('Unable to auto-detect sandbox provider. Pass { provider }.')

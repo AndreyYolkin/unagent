@@ -1,9 +1,11 @@
 import type { CloudflareNamespace } from './cloudflare'
 import type { FileEntry, ListFilesOptions, ProcessOptions, SandboxCapabilities, SandboxExecOptions, SandboxExecResult, SandboxProcess, SandboxProvider } from './common'
+import type { DenoNamespace } from './deno'
 import type { VercelNamespace } from './vercel'
 
 export type * from './cloudflare'
 export type * from './common'
+export type * from './deno'
 export type * from './vercel'
 
 // === Unified Sandbox Interface ===
@@ -32,8 +34,10 @@ export interface Sandbox<P extends SandboxProvider = SandboxProvider> {
   // === Platform namespaces ===
   readonly vercel: P extends 'vercel' ? VercelNamespace : never
   readonly cloudflare: P extends 'cloudflare' ? CloudflareNamespace : never
+  readonly deno: P extends 'deno' ? DenoNamespace : never
 }
 
 // === Typed sandbox aliases ===
 export type VercelSandbox = Sandbox<'vercel'>
 export type CloudflareSandbox = Sandbox<'cloudflare'>
+export type DenoSandbox = Sandbox<'deno'>
