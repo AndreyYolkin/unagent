@@ -103,6 +103,14 @@
       "types": "./dist/vector/index.d.ts",
       "default": "./dist/vector/index.js"
     },
+    "./vector/nitro": {
+      "types": "./dist/vector/nitro/index.d.ts",
+      "default": "./dist/vector/nitro/index.js"
+    },
+    "./vector/nuxt": {
+      "types": "./dist/vector/nuxt/module.d.ts",
+      "default": "./dist/vector/nuxt/module.js"
+    },
     "./vector/adapters/*": {
       "types": "./dist/vector/adapters/*.d.ts",
       "default": "./dist/vector/adapters/*.js"
@@ -131,6 +139,7 @@
     "test": "vitest",
     "playground:vectorize:smoke": "node playground/scripts/vectorize-smoke.mjs",
     "playground:vector:e2e": "pnpm build && node playground/scripts/vector-e2e.mjs",
+    "playground:workflow:e2e": "node playground/scripts/openworkflow-e2e.mjs",
     "release": "bumpp",
     "prepare": "simple-git-hooks",
     "prepublishOnly": "pnpm run build"
@@ -144,12 +153,15 @@
     "@deno/sandbox": ">=0.1.0",
     "@huggingface/transformers": ">=0.0.0",
     "@libsql/client": ">=0.0.0",
+    "@nuxt/kit": ">=4.0.0",
+    "@nuxt/schema": ">=4.0.0",
     "@pinecone-database/pinecone": ">=0.0.0",
     "@qdrant/js-client-rest": ">=0.0.0",
     "@upstash/vector": ">=1.0.0",
     "@vercel/sandbox": ">=0.1.0",
     "ai": ">=3.0.0",
     "ollama-ai-provider-v2": ">=0.0.0",
+    "openworkflow": ">=0.0.0",
     "pg": ">=8.0.0",
     "sqlite-vec": ">=0.0.0",
     "unstorage": ">=1.10.0",
@@ -180,6 +192,12 @@
     "@libsql/client": {
       "optional": true
     },
+    "@nuxt/kit": {
+      "optional": true
+    },
+    "@nuxt/schema": {
+      "optional": true
+    },
     "@pinecone-database/pinecone": {
       "optional": true
     },
@@ -196,6 +214,9 @@
       "optional": true
     },
     "ollama-ai-provider-v2": {
+      "optional": true
+    },
+    "openworkflow": {
       "optional": true
     },
     "pg": {
@@ -220,6 +241,8 @@
   "devDependencies": {
     "@antfu/eslint-config": "catalog:lint",
     "@libsql/client": "catalog:vector",
+    "@nuxt/kit": "catalog:docs",
+    "@nuxt/schema": "catalog:docs",
     "@pinecone-database/pinecone": "catalog:vector",
     "@qdrant/js-client-rest": "catalog:vector",
     "@types/node": "catalog:types",
