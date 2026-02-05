@@ -1,3 +1,4 @@
+import type { NuxtModule } from '@nuxt/schema'
 import type { VectorProviderName } from '../_providers'
 import type { EmbeddingConfig, VectorProviderOptions } from '../types'
 import { addImportsDir, addPlugin, createResolver, defineNuxtModule } from '@nuxt/kit'
@@ -17,7 +18,7 @@ export interface VectorNuxtModuleOptions {
   cache?: boolean
 }
 
-export default defineNuxtModule<VectorNuxtModuleOptions>({
+const vectorModule: NuxtModule<VectorNuxtModuleOptions> = defineNuxtModule<VectorNuxtModuleOptions>({
   meta: {
     name: 'unagent-vector',
     configKey: 'vector',
@@ -49,7 +50,7 @@ export default defineNuxtModule<VectorNuxtModuleOptions>({
     if (typeof runtimeConfig.cache !== 'boolean')
       runtimeConfig.cache = options.cache
 
-    nuxt.hook('nitro:config', (nitroConfig) => {
+    nuxt.hook('nitro:config' as any, (nitroConfig: any) => {
       nitroConfig.plugins ||= []
       nitroConfig.plugins.push(resolve('./runtime/nitro'))
     })
@@ -58,3 +59,5 @@ export default defineNuxtModule<VectorNuxtModuleOptions>({
     addPlugin(resolve('./runtime/plugins/vector.server'))
   },
 })
+
+export default vectorModule

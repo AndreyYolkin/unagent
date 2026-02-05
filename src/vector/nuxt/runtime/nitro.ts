@@ -51,7 +51,7 @@ function normalizeProviderOptions(raw: VectorProviderOptions): VectorProviderOpt
   return copy
 }
 
-export default defineNitroPlugin((nitroApp) => {
+const vectorNitroRuntime: ReturnType<typeof defineNitroPlugin> = defineNitroPlugin((nitroApp) => {
   const runtimeConfig = useRuntimeConfig()
   const vectorConfig = (runtimeConfig as any).vector || {}
   const providersConfig = vectorConfig.providers || {}
@@ -71,3 +71,5 @@ export default defineNitroPlugin((nitroApp) => {
     cache: typeof vectorConfig.cache === 'boolean' ? vectorConfig.cache : true,
   })(nitroApp)
 })
+
+export default vectorNitroRuntime
